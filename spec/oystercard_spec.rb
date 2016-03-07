@@ -41,7 +41,20 @@ subject(:card) { described_class.new }
         expect{subject.deduct(amount)}.to raise_error message
       end
     end
+  end
 
+  describe '#touch_in' do
+    it 'changes in_journey to true' do
+      status = subject.in_journey
+      expect(subject.touch_in).not_to eq status
+    end
+  end
+
+  describe '#touch_out' do
+    it 'changes in_journey to false' do
+      status = subject.in_journey
+      expect(subject.touch_out).not_to eq status
+    end
   end
 
 end
