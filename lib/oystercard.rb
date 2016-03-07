@@ -4,7 +4,7 @@ class Oystercard
   MINIMUM = 1
   SINGLE_FARE = 2
 
-  attr_reader :in_journey, :entry_station
+  attr_reader :entry_station
 
   def initialize(balance=DEFAULT_BALANCE)
     @balance = balance
@@ -34,13 +34,14 @@ class Oystercard
     in_journey?
   end
 
+  def in_journey?
+    !!entry_station
+  end
+
+
   private
 
   attr_reader :balance
-
-  def in_journey?
-    !!entry_station == true ? @in_journey = true : @in_journey = false
-  end
 
   def deduct (amount)
     raise 'balance below zero' if @balance - amount < 0
