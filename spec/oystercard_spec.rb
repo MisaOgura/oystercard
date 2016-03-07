@@ -12,7 +12,7 @@ single_fare = Oystercard::SINGLE_FARE
 
   describe '#initialize' do
     it 'creates a card with empty history' do
-      expect(card.history.empty?).to eq true
+      expect(subject.check_history.empty?).to eq true
     end
   end
 

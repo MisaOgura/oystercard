@@ -4,7 +4,7 @@ class Oystercard
   MINIMUM = 1
   SINGLE_FARE = 2
 
-  attr_reader :entry_station, :history
+  attr_reader :entry_station
 
   def initialize(balance=DEFAULT_BALANCE)
     @balance = balance
@@ -32,8 +32,6 @@ class Oystercard
   def touch_out exit_station
     @exit_station = exit_station
     @history[@entry_station] = exit_station
-    @entry_station = nil
-    @exit_station = nil
     deduct SINGLE_FARE
     in_journey?
   end
@@ -48,7 +46,7 @@ class Oystercard
 
   private
 
-  attr_reader :balance
+  attr_reader :balance, :history
 
   def deduct (amount)
     raise 'balance below zero' if @balance - amount < 0
