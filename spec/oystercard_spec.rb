@@ -2,12 +2,19 @@ require 'oystercard'
 
 describe Oystercard do
 subject(:card) { described_class.new }
-let(:station) { double(:station)}
+let(:entry_station) { double(:station)}
+let(:exit_station) { double(:station)}
 
 default_balance = Oystercard::DEFAULT_BALANCE
 maximum = Oystercard::MAXIMUM
 minimum = Oystercard::MINIMUM
 single_fare = Oystercard::SINGLE_FARE
+
+  describe '#initialize' do
+    it 'creates a card with empty history' do
+      expect(card.history.empty?).to eq true
+    end
+  end
 
   describe '#check_balance' do
     it 'has a balance' do
@@ -35,35 +42,42 @@ single_fare = Oystercard::SINGLE_FARE
     it 'raise an error when balance below £1' do
       empty_card = described_class.new(0)
       message = "need minimum £#{minimum} to touch-in"
-      expect{empty_card.touch_in station}.to raise_error message
+      expect{empty_card.touch_in entry_station}.to raise_error message
     end
 
-    it 'changes in_journey? to true' do
-      subject.touch_in station
-      expect(subject.in_journey?).to eq true
-    end
+    context 'when the balance is more than minimum' do
 
-    it 'remembers the entry station' do
-      subject.touch_in station
-      expect(subject.entry_station).to eq station
+      before(:each) do
+        subject.touch_in entry_station
+      end
+
+      it 'changes in_journey? to true' do
+        expect(subject.in_journey?).to eq true
+      end
+
+      it 'remembers the entry station' do
+        expect(subject.entry_station).to eq entry_station
+      end
     end
   end
 
   describe '#touch_out' do
     it 'changes in_journey? to false' do
-      subject.touch_in station
-      subject.touch_out
+      subject.touch_out exit_station
       expect(subject.in_journey?).to eq false
     end
 
     it 'deducts a fare from the card' do
-      expect{subject.touch_out}.to change{subject.check_balance}.by(-single_fare)
+      expect{subject.touch_out(exit_station)}.to change{subject.check_balance}.by(-single_fare)
     end
+  end
 
-    it 'forgets the entry station' do
-      subject.touch_in station
-      subject.touch_out
-      expect(subject.entry_station).to eq nil
+  describe '#check_history' do
+
+    it 'shows the history of one journey' do
+      subject.touch_in entry_station
+      subject.touch_out exit_station
+      expect(subject.check_history[entry_station]).to eq exit_station
     end
   end
 end
