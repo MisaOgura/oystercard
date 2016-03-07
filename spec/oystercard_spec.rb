@@ -25,4 +25,23 @@ subject(:card) { described_class.new }
     end
   end
 
+  describe '#deduct' do
+    it 'deduct money from the card' do
+      init_balance = subject.check_balance
+      amount = Random.rand(1..5)
+      subject.deduct(amount)
+      expect(subject.check_balance).to eq (init_balance - amount)
+    end
+
+    context 'when balance becomes below 0' do
+      it 'raise an error' do
+        init_balance = subject.check_balance
+        amount = Random.rand(6..10)
+        message = 'balance below zero'
+        expect{subject.deduct(amount)}.to raise_error message
+      end
+    end
+
+  end
+
 end
