@@ -3,24 +3,29 @@ require 'oystercard'
 describe Oystercard do
 subject(:card) { described_class.new }
 
+default_balance = Oystercard::DEFAULT_BALANCE
+maximum = Oystercard::MAXIMUM
+minimum = Oystercard::MINIMUM
+
+
 
   describe '#check_balance' do
     it 'has a balance' do
-      expect(subject.check_balance).to eq Oystercard::DEFAULT_BALANCE
+      expect(subject.check_balance).to eq default_balance
     end
   end
 
   describe '#topup' do
     it 'adds money to the balance' do
       amount = Random.rand(5..10)
-      expect(subject.topup(amount)).to eq (Oystercard::DEFAULT_BALANCE + amount)
+      expect(subject.top_up(amount)).to eq (default_balance + amount)
     end
 
     context 'when maximum balance exceeded' do
       it 'raises an error' do
         amount = Random.rand(100..200)
-        message = "maximum balance is £#{Oystercard::MAXIMUM}"
-        expect{subject.topup(amount)}.to raise_error message
+        message = "maximum balance is £#{maximum}"
+        expect{subject.top_up(amount)}.to raise_error message
       end
     end
   end
@@ -46,8 +51,8 @@ subject(:card) { described_class.new }
   describe '#touch_in' do
 
     it 'raise an error when balance below £1' do
-      card.deduct(5)
-      message = 'need minimum £1 to touch-in'
+      card.deduct(default_balance)
+      message = "need minimum £#{minimum} to touch-in"
       expect{card.touch_in}.to raise_error message
     end
 

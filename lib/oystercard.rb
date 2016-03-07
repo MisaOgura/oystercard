@@ -13,7 +13,7 @@ class Oystercard
     balance
   end
 
-  def topup (amount)
+  def top_up (amount)
     if @balance + amount > MAXIMUM
       raise "maximum balance is £#{MAXIMUM}"
     end
