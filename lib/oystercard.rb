@@ -9,6 +9,10 @@ class Oystercard
     balance
   end
 
+  def topup (amount)
+    @balance += amount
+  end
+
   private
   attr_reader :balance
 end
