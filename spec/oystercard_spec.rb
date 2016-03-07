@@ -2,6 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
 subject(:card) { described_class.new }
+let(:station) { double(:station)}
 
 default_balance = Oystercard::DEFAULT_BALANCE
 maximum = Oystercard::MAXIMUM
@@ -34,24 +35,35 @@ single_fare = Oystercard::SINGLE_FARE
     it 'raise an error when balance below £1' do
       empty_card = described_class.new(0)
       message = "need minimum £#{minimum} to touch-in"
-      expect{empty_card.touch_in}.to raise_error message
+      expect{empty_card.touch_in station}.to raise_error message
     end
 
     it 'changes in_journey to true' do
-      subject.touch_in
+      subject.touch_in station
       expect(subject.in_journey).to eq true
+    end
+
+    it 'remembers the entry station' do
+      subject.touch_in station
+      expect(subject.entry_station).to eq station
     end
   end
 
   describe '#touch_out' do
     it 'changes in_journey to false' do
-      subject.touch_in
+      subject.touch_in station
       subject.touch_out
       expect(subject.in_journey).to eq false
     end
 
     it 'deducts a fare from the card' do
       expect{subject.touch_out}.to change{subject.check_balance}.by(-single_fare)
+    end
+
+    it 'forgets the entry station' do
+      subject.touch_in station
+      subject.touch_out
+      expect(subject.entry_station).to eq nil
     end
   end
 end
