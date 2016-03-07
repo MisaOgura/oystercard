@@ -19,7 +19,7 @@ subject(:card) { described_class.new }
     context 'when maximum balance exceeded' do
       it 'raises an error' do
         amount = Random.rand(100..200)
-        message = "maximum balance is £#{Oystercard::DEFAULT_MAXIMUM}"
+        message = "maximum balance is £#{Oystercard::MAXIMUM}"
         expect{subject.topup(amount)}.to raise_error message
       end
     end
@@ -44,6 +44,13 @@ subject(:card) { described_class.new }
   end
 
   describe '#touch_in' do
+
+    it 'raise an error when balance below £1' do
+      card.deduct(5)
+      message = 'need minimum £1 to touch-in'
+      expect{card.touch_in}.to raise_error message
+    end
+
     it 'changes in_journey to true' do
       status = subject.in_journey
       expect(subject.touch_in).not_to eq status

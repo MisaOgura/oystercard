@@ -1,6 +1,7 @@
 class Oystercard
   DEFAULT_BALANCE = 5
-  DEFAULT_MAXIMUM = 90
+  MAXIMUM = 90
+  MINIMUM = 1
 
   attr_reader :in_journey
   def initialize(balance=DEFAULT_BALANCE)
@@ -13,8 +14,8 @@ class Oystercard
   end
 
   def topup (amount)
-    if @balance + amount > DEFAULT_MAXIMUM
-      raise "maximum balance is £#{DEFAULT_MAXIMUM}"
+    if @balance + amount > MAXIMUM
+      raise "maximum balance is £#{MAXIMUM}"
     end
     @balance += amount
   end
@@ -25,6 +26,7 @@ class Oystercard
   end
 
   def touch_in
+    raise 'need minimum £1 to touch-in' if @balance < MINIMUM
     in_journey?
   end
 
