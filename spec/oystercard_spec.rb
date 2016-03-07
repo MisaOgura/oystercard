@@ -6,8 +6,7 @@ subject(:card) { described_class.new }
 default_balance = Oystercard::DEFAULT_BALANCE
 maximum = Oystercard::MAXIMUM
 minimum = Oystercard::MINIMUM
-
-
+single_fare = Oystercard::SINGLE_FARE
 
   describe '#check_balance' do
     it 'has a balance' do
@@ -15,7 +14,7 @@ minimum = Oystercard::MINIMUM
     end
   end
 
-  describe '#topup' do
+  describe '#top_up' do
     it 'adds money to the balance' do
       amount = Random.rand(5..10)
       expect(subject.top_up(amount)).to eq (default_balance + amount)
@@ -30,43 +29,29 @@ minimum = Oystercard::MINIMUM
     end
   end
 
-  describe '#deduct' do
-    it 'deduct money from the card' do
-      init_balance = subject.check_balance
-      amount = Random.rand(1..5)
-      subject.deduct(amount)
-      expect(subject.check_balance).to eq (init_balance - amount)
-    end
-
-    context 'when balance becomes below 0' do
-      it 'raise an error' do
-        init_balance = subject.check_balance
-        amount = Random.rand(6..10)
-        message = 'balance below zero'
-        expect{subject.deduct(amount)}.to raise_error message
-      end
-    end
-  end
-
   describe '#touch_in' do
 
     it 'raise an error when balance below £1' do
-      card.deduct(default_balance)
+      empty_card = described_class.new(0)
       message = "need minimum £#{minimum} to touch-in"
-      expect{card.touch_in}.to raise_error message
+      expect{empty_card.touch_in}.to raise_error message
     end
 
     it 'changes in_journey to true' do
-      status = subject.in_journey
-      expect(subject.touch_in).not_to eq status
+      subject.touch_in
+      expect(subject.in_journey).to eq true
     end
   end
 
   describe '#touch_out' do
     it 'changes in_journey to false' do
-      status = subject.in_journey
-      expect(subject.touch_out).not_to eq status
+      subject.touch_in
+      subject.touch_out
+      expect(subject.in_journey).to eq false
+    end
+
+    it 'deducts a fare from the card' do
+      expect{subject.touch_out}.to change{subject.check_balance}.by(-single_fare)
     end
   end
-
 end
