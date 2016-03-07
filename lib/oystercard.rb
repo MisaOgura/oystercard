@@ -17,6 +17,11 @@ class Oystercard
     @balance += amount
   end
 
+  def deduct (amount)
+    raise 'balance below zero' if @balance - amount < 0
+    @balance -= amount
+  end
+
   private
   attr_reader :balance
 end
