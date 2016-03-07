@@ -19,7 +19,7 @@ subject(:card) { described_class.new }
     context 'when maximum balance exceeded' do
       it 'raises an error' do
         amount = Random.rand(100..200)
-        message = 'maximum balance is £90'
+        message = "maximum balance is £#{Oystercard::DEFAULT_MAXIMUM}"
         expect{subject.topup(amount)}.to raise_error message
       end
     end
