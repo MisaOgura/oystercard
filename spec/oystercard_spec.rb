@@ -4,7 +4,7 @@ describe Oystercard do
 subject(:card) { described_class.new }
 let(:entry_station) { double(:station)}
 let(:exit_station) { double(:station)}
-# let(:journey) { {entry_station: entry_station, exit_station: exit_station} }
+let(:journey) { {entry_station: entry_station, exit_station: exit_station} }
 
 default_balance = Oystercard::DEFAULT_BALANCE
 maximum = Oystercard::MAXIMUM
@@ -13,7 +13,7 @@ single_fare = Oystercard::SINGLE_FARE
 
   describe '#initialize' do
     it 'creates a card with empty history' do
-      expect(card.check_history.empty?).to eq true
+      expect(card.journeys.empty?).to eq true
     end
   end
 
@@ -63,12 +63,12 @@ single_fare = Oystercard::SINGLE_FARE
     end
   end
 
-  describe '#check_history' do
+  describe '#journeys' do
 
-    it 'shows the history of one journey' do
+    it 'shows one journey' do
       card.touch_in entry_station
       card.touch_out exit_station
-      expect(card.check_history[entry_station]).to eq exit_station
+      expect(card.journeys).to include (journey)
     end
   end
 end

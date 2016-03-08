@@ -1,15 +1,17 @@
+
+
 class Oystercard
   DEFAULT_BALANCE = 5
   MAXIMUM = 90
   MINIMUM = 1
   SINGLE_FARE = 2
 
-  attr_reader :balance
+  attr_reader :balance, :journeys
 
   def initialize(balance=DEFAULT_BALANCE)
     @balance = balance
     @in_journey = false
-    @history = {}
+    @journeys = {}
   end
 
   def top_up amount
@@ -20,29 +22,22 @@ class Oystercard
   end
 
   def touch_in entry_station
-    @entry_station = entry_station
+    @journeys[:entry_station] = entry_station
     raise "need minimum £#{MINIMUM} to touch-in" if @balance < MINIMUM
     in_journey?
   end
 
   def touch_out exit_station
-    @exit_station = exit_station
-    @history[@entry_station] = exit_station
+    @journeys[:exit_station] = exit_station
     deduct SINGLE_FARE
     in_journey?
   end
 
   def in_journey?
-    !!@entry_station
-  end
-
-  def check_history
-    @history.clone.freeze
+    journeys.keys.include?(:entry_station)
   end
 
   private
-
-  attr_reader :history
 
   def deduct (amount)
     raise 'balance below zero' if @balance - amount < 0
