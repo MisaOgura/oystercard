@@ -4,6 +4,7 @@ describe Oystercard do
 subject(:card) { described_class.new }
 let(:entry_station) { double(:station)}
 let(:exit_station) { double(:station)}
+# let(:journey) { {entry_station: entry_station, exit_station: exit_station} }
 
 default_balance = Oystercard::DEFAULT_BALANCE
 maximum = Oystercard::MAXIMUM
@@ -53,10 +54,6 @@ single_fare = Oystercard::SINGLE_FARE
 
       it 'changes in_journey? to true' do
         expect(subject.in_journey?).to eq true
-      end
-
-      it 'remembers the entry station' do
-        expect(subject.entry_station).to eq entry_station
       end
     end
   end

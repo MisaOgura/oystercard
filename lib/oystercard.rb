@@ -4,8 +4,6 @@ class Oystercard
   MINIMUM = 1
   SINGLE_FARE = 2
 
-  attr_reader :entry_station
-
   def initialize(balance=DEFAULT_BALANCE)
     @balance = balance
     @in_journey = false
@@ -37,11 +35,11 @@ class Oystercard
   end
 
   def in_journey?
-    !!entry_station
+    !!@entry_station
   end
 
   def check_history
-    @history
+    @history.clone.freeze
   end
 
   private
