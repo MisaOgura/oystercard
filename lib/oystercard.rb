@@ -4,14 +4,12 @@ class Oystercard
   MINIMUM = 1
   SINGLE_FARE = 2
 
+  attr_reader :balance
+
   def initialize(balance=DEFAULT_BALANCE)
     @balance = balance
     @in_journey = false
     @history = {}
-  end
-
-  def check_balance
-    balance
   end
 
   def top_up amount
@@ -23,7 +21,7 @@ class Oystercard
 
   def touch_in entry_station
     @entry_station = entry_station
-    raise "need minimum £#{MINIMUM} to touch-in" if check_balance < MINIMUM
+    raise "need minimum £#{MINIMUM} to touch-in" if @balance < MINIMUM
     in_journey?
   end
 
@@ -44,7 +42,7 @@ class Oystercard
 
   private
 
-  attr_reader :balance, :history
+  attr_reader :history
 
   def deduct (amount)
     raise 'balance below zero' if @balance - amount < 0

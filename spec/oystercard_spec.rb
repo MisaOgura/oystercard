@@ -17,12 +17,6 @@ single_fare = Oystercard::SINGLE_FARE
     end
   end
 
-  describe '#check_balance' do
-    it 'has a balance' do
-      expect(card.check_balance).to eq default_balance
-    end
-  end
-
   describe '#top_up' do
     it 'adds money to the balance' do
       amount = Random.rand(5..10)
@@ -31,7 +25,7 @@ single_fare = Oystercard::SINGLE_FARE
 
     context 'when maximum balance exceeded' do
       it 'raises an error' do
-        amount = Random.rand(100..200)
+        amount = Random.rand((maximum + 1 - card.balance)..100)
         message = "maximum balance is £#{maximum}"
         expect{card.top_up(amount)}.to raise_error message
       end
@@ -65,7 +59,7 @@ single_fare = Oystercard::SINGLE_FARE
     end
 
     it 'deducts a fare from the card' do
-      expect{card.touch_out(exit_station)}.to change{card.check_balance}.by(-single_fare)
+      expect{card.touch_out(exit_station)}.to change{card.balance}.by(-single_fare)
     end
   end
 

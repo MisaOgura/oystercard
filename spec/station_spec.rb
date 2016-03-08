@@ -1,15 +1,15 @@
 require 'station'
 
 describe Station do
+  list = Station::LIST
 
 subject(:station) { described_class.new('Turnpike Lane') }
 
   describe '#initialize' do
-    it 'creates a station with name' do
-      expect(station.name).not_to eq nil
-    end
-    it 'creates a station with zone attribute' do
-      expect(station.zone).to eq 3
+    it 'creates a station with zone given a station name' do
+      name = list.keys.sample
+      station = described_class.new(name.to_s)
+      expect(station.zone).to eq list[name]
     end
   end
 end
