@@ -23,6 +23,10 @@ describe Oystercard do
       expect(card.origin).to eq nil
     end
 
+    it 'is initialized with an empty hash' do
+      p card.journeys
+      expect(card.journeys).to eq({})
+    end
   end
 
   describe '#top_up' do
