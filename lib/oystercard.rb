@@ -1,15 +1,14 @@
-
-
 class Oystercard
   DEFAULT_BALANCE = 5
   MAXIMUM = 90
   MINIMUM = 1
   SINGLE_FARE = 2
 
-  attr_reader :balance, :journeys
+  attr_reader :balance, :journeys, :journey
 
-  def initialize(balance=DEFAULT_BALANCE)
+  def initialize(balance=DEFAULT_BALANCE, journey=Journey.new)
     @balance = balance
+    @journey = journey
     @in_journey = false
     @journeys = {}
   end
@@ -22,12 +21,14 @@ class Oystercard
   end
 
   def touch_in entry_station
-    @journeys[:entry_station] = entry_station
     raise "need minimum £#{MINIMUM} to touch-in" if @balance < MINIMUM
+    journey.start_journey(entry_station)
+    @journeys[:entry_station] = entry_station
     in_journey?
   end
 
   def touch_out exit_station
+    @journey.end_journey(exit_station)
     @journeys[:exit_station] = exit_station
     deduct SINGLE_FARE
     in_journey?

@@ -4,7 +4,8 @@ describe Oystercard do
 subject(:card) { described_class.new }
 let(:entry_station) { double(:station)}
 let(:exit_station) { double(:station)}
-let(:journey) { {entry_station: entry_station, exit_station: exit_station} }
+let(:a_journey) { {entry_station: entry_station, exit_station: exit_station} }
+let(:journey) { double(:journey, start_journey: nil, end_journey: nil) }
 
 default_balance = Oystercard::DEFAULT_BALANCE
 maximum = Oystercard::MAXIMUM
@@ -12,8 +13,12 @@ minimum = Oystercard::MINIMUM
 single_fare = Oystercard::SINGLE_FARE
 
   describe '#initialize' do
-    it 'creates a card with empty history' do
-      expect(card.journeys.empty?).to eq true
+    it 'instantiates a card with a default_balance' do
+      expect(card.balance).to eq default_balance
+    end
+
+    it 'instantiates a card with a Journey class object' do
+      expect(card.journey).to be_an_instance_of(Journey)
     end
   end
 
@@ -41,8 +46,12 @@ single_fare = Oystercard::SINGLE_FARE
     end
 
     context 'when the balance is more than minimum' do
-
       before(:each) do
+        card.touch_in entry_station
+      end
+
+      it 'calls start_journey method on journey' do
+        expect(card.journey).to receive(:start_journey)
         card.touch_in entry_station
       end
 
@@ -53,6 +62,15 @@ single_fare = Oystercard::SINGLE_FARE
   end
 
   describe '#touch_out' do
+    # before(:each) do
+    #   card.touch_out exit_station
+    # end
+
+    it 'calls end_journey method on journey' do
+      expect(card.journey).to receive(:end_journey)
+      card.touch_out exit_station
+    end
+
     it 'changes in_journey? to false' do
       card.touch_out exit_station
       expect(card.in_journey?).to eq false
@@ -68,7 +86,7 @@ single_fare = Oystercard::SINGLE_FARE
     it 'shows one journey' do
       card.touch_in entry_station
       card.touch_out exit_station
-      expect(card.journeys).to include (journey)
+      expect(card.journeys).to include (a_journey)
     end
   end
 end
