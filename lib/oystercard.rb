@@ -31,7 +31,7 @@ class Oystercard
   private
 
   def deduct (amount)
-    raise 'balance below zero' if @balance - amount < 0
+    # raise 'balance below zero' if @balance - amount < 0
     @balance -= amount
   end
 end

@@ -5,18 +5,16 @@ describe Journey do
   subject(:journey) { described_class.new }
   let(:entry_station) { double(:station)}
   let(:exit_station) { double(:station)}
-  let(:entry_log) { {entry_station: entry_station} }
-  let(:exit_log) { {exit_station: exit_station} }
-
-
 
   describe '#initialize' do
-    it 'instantiates a journey with complete attribute as true' do
+    it 'creates a journey with complete attribute as true' do
       expect(journey.complete?).to eq true
     end
-
-    it 'instantiates a journey with an empty hash: history' do
-      expect(journey.history).to eq({})
+    it 'creates a hash with entry_station: []' do
+      expect(journey.history[:entry_station]).to eq([])
+    end
+    it 'creates a hash with exit_station: []' do
+      expect(journey.history[:exit_station]).to eq([])
     end
   end
 
@@ -24,25 +22,26 @@ describe Journey do
     before(:each) do
       journey.start_journey(entry_station)
     end
-
     it 'starts a journey' do
       expect(journey.complete?).to eq false
     end
     it 'stores an entry_station to the history' do
-      expect(journey.history).to include entry_log
+      expect(journey.history[:entry_station]).to include entry_station
     end
   end
 
   describe '#end_journey' do
-    it 'ends a journey' do
+    before(:each) do
       journey.end_journey(exit_station)
+    end
+    it 'ends a journey' do
       expect(journey.complete?).to eq true
     end
-
     it 'stores an exit_station to the history' do
-      journey.end_journey(exit_station)
-      expect(journey.history).to include exit_log
+      expect(journey.history[:exit_station]).to include exit_station
     end
   end
+
+  describe '#end_journey'
 
 end
