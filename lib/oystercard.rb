@@ -5,9 +5,10 @@ class Oystercard
   MIN_FARE = 1
   PENALTY_FARE = 6
 
-  attr_reader :balance, :entry_station, :journey_log, :journey_index, :current_journey
+  attr_reader :balance, :entry_station, :journey_log
 
-  def initialize
+  def initialize(journey_log_class = JourneyLog)
+    @log = journey_log_class.new
     @balance = 0
     @journey_log = []
     @journey_index = 0
@@ -20,11 +21,18 @@ class Oystercard
 
   def touch_in(station)
     fail "Card balance is too low." if below_min?
-    @journey_log << Journey.new
-    deduct(journey_log[-2].fare) if @journey_log.count >=2 && !@journey_log[-2].complete?
-    @journey_log[-1].start(station)
-    increment_journey_index
-    @journeys[journey_index] = { :in => station }                                                  # does this violate SRP?
+    deduct(@log.charge) if !@log.show_last_journey.nil? && !@log.show_last_journey.complete?
+    # if @log.show_last_journey.nil?
+    #   @log.start(station)
+    # elsif !@log.show_last_journey.complete?
+    #   deduct(@log.charge)
+    #   @log.start(station)
+    # end
+    # journey_log.start
+    # deduct (journey_log.charge) if @journey_log.count >=2 && !@journey_log[-2].complete?
+    # @journey_log << Journey.new
+    # deduct(@journey_log[-1].) if @journey_log.count >=2 && !@journey_log[-2].complete?
+    # @journey_log[-1].start(station)
   end
 
   def touch_out(station)
@@ -36,10 +44,6 @@ class Oystercard
       @journey_log[-1].finish(station)
     end
     deduct(@journey_log[-1].fare)
-  end
-
-  def increment_journey_index
-    @journey_index += 1
   end
 
   def previous_journey_complete?

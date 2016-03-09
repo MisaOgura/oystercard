@@ -3,6 +3,9 @@ require 'oystercard'
 
 describe Oystercard do
 
+  min_fare = Oystercard::MIN_FARE
+  penalty_fare = Oystercard::PENALTY_FARE
+
   subject(:card) { described_class.new }
   let(:station) { double(:station)}
   let(:station2) { double(:station)}
@@ -29,25 +32,25 @@ describe Oystercard do
   context 'Oystercard actions' do
 
     describe '#touch_in' do
-      it 'should create a journey object' do
-        card.top_up(5)
-        card.touch_in(station)
-        expect(card.journey_log[-1]).to be_an_instance_of Journey
-      end
-      it 'should check whether previous journey was complete' do
-        card.top_up(10)
-        card.touch_in(station)
-        card.touch_in(station)
-        expect(card.previous_journey_complete?).to eq false
-      end
-      it 'should deduct penalty fare for incomplete previous journey' do
-        card.top_up(10)
-        card.touch_in(station)
-        card.touch_in(station)
-        expect(card.balance).to eq 10 - Oystercard::PENALTY_FARE
-      end
       it 'should raise an error if balance is below mininum amount' do
         expect { card.touch_in(station) }.to raise_error "Card balance is too low."
+      end
+      # it 'should create a journey object' do
+      #   card.top_up(5)
+      #   card.touch_in(station)
+      #   expect(card.journey_log[-1]).to be_an_instance_of Journey
+      # end
+      # it 'should check whether previous journey was complete' do
+      #   card.top_up(10)
+      #   card.touch_in(station)
+      #   card.touch_in(station)
+      #   expect(card.previous_journey_complete?).to eq false
+      # end
+      it 'should deduct penalty fare for invalid touch in' do
+        card.top_up(10)
+        card.touch_in(station)
+        p @log.show_last_journey
+        expect{card.touch_in(station)}.to change{card.balance}. by -penalty_fare
       end
     end
 
