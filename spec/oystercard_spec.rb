@@ -1,16 +1,15 @@
 require 'oystercard'
 
 describe Oystercard do
-subject(:card) { described_class.new }
-let(:entry_station) { double(:station)}
-let(:exit_station) { double(:station)}
-let(:a_journey) { {entry_station: entry_station, exit_station: exit_station} }
-let(:journey) { double(:journey, start_journey: nil, end_journey: nil) }
 
-default_balance = Oystercard::DEFAULT_BALANCE
-maximum = Oystercard::MAXIMUM
-minimum = Oystercard::MINIMUM
-min_fare = Oystercard::MIN_FARE
+  default_balance = Oystercard::DEFAULT_BALANCE
+  maximum = Oystercard::MAXIMUM
+  minimum = Oystercard::MINIMUM
+  min_fare = Oystercard::MIN_FARE
+
+  subject(:card) { described_class.new }
+  let(:entry_station) { double(:station)}
+  let(:exit_station) { double(:station)}
 
   describe '#initialize' do
     it 'instantiates a card with a default_balance' do
@@ -40,14 +39,14 @@ min_fare = Oystercard::MIN_FARE
       expect{empty_card.touch_in entry_station}.to raise_error message
     end
     it 'calls start_journey method on journey' do
-      expect(card.journey).to receive(:start_journey)
+      expect(card.journey).to receive(:start_at)
       card.touch_in entry_station
     end
   end
 
   describe '#touch_out' do
     it 'calls end_journey method on journey' do
-      expect(card.journey).to receive(:end_journey)
+      expect(card.journey).to receive(:end_at)
       card.touch_out exit_station
     end
     it 'deducts a fare from the card' do

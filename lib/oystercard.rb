@@ -12,19 +12,17 @@ class Oystercard
   end
 
   def top_up amount
-    if @balance + amount > MAXIMUM
-      raise "maximum balance is £#{MAXIMUM}"
-    end
+    raise "maximum balance is £#{MAXIMUM}" if @balance + amount > MAXIMUM
     @balance += amount
   end
 
   def touch_in entry_station
     raise "need minimum £#{MINIMUM} to touch-in" if @balance < MINIMUM
-    @journey.start_journey(entry_station)
+    @journey.start_at(entry_station)
   end
 
   def touch_out exit_station
-    @journey.end_journey(exit_station)
+    @journey.end_at(exit_station)
     deduct MIN_FARE
   end
 
