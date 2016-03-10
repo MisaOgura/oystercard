@@ -1,5 +1,3 @@
-require_relative 'journey'
-
 class Oystercard
 
   DEFAULT_BALANCE = 0
@@ -35,7 +33,6 @@ class Oystercard
   end
 
   private
-
 
   def deduct(amount)
     @balance -= amount

@@ -1,8 +1,4 @@
-require_relative 'journey'
-
 class JourneyLog
-
-attr_reader
 
   def initialize( journey_class: Journey )
     @journey_class = journey_class

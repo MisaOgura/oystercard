@@ -15,7 +15,3 @@ log.exit(station2)
 p log.journeys
 p log.journeys.length
 p log.journeys[-1].complete?
-
-p log.journeys[-1].zones_crossed
-
-p log.journeys[-1].fare_calc

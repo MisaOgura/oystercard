@@ -33,8 +33,6 @@ describe Journey do
   end
 
   describe '#fare' do
-
-
     it '4.0 a journey between Shoreditch and Hoxton costs £6' do
       journey.start(entry_station)
       journey.finish(exit_station)

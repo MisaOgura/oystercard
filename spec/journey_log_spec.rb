@@ -35,6 +35,5 @@ describe JourneyLog do
       journey_log.exit(exit_station)
       expect(journey_log.journeys.length).to eq 3
     end
-
   end
 end

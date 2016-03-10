@@ -41,9 +41,9 @@ describe Oystercard do
       card.top_up(10)
       card.touch_in(entry_station)
     end
-  it "deducts the correct fare" do
-      allow(journey).to receive(:fare).and_return 6
-      expect{card.touch_out(exit_station)}.to change{card.balance}.by -journey.fare
+    it "deducts the correct fare" do
+        allow(journey).to receive(:fare).and_return 6
+        expect{card.touch_out(exit_station)}.to change{card.balance}.by -journey.fare
+    end
   end
-end
 end

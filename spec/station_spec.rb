@@ -11,6 +11,5 @@ subject(:station) { described_class.new("Shoreditch", 1) }
     it '1.1 creates a station with a station name' do
       expect(station.name).to eq "Shoreditch"
     end
-
   end
 end
