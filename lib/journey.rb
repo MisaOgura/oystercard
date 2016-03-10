@@ -21,8 +21,6 @@ class Journey
     complete? ? MIN_FARE : PENALTY_FARE
   end
 
-  private
-
   def complete?
     !!@entry_station && !!@exit_station
   end

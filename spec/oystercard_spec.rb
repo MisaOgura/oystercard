@@ -14,8 +14,8 @@ describe Oystercard do
     it '1.0 initializes with a default balance' do
       expect(card.balance).to eq(default_balance)
     end
-    it '1.1 initializes with journeys = []' do
-      expect(card.journeys).to eq([])
+    it '1.1 initializes with a journey log' do
+      expect(card.journey_log).to be_an_instance_of JourneyLog
     end
   end
 
@@ -36,25 +36,29 @@ describe Oystercard do
       message = "Need at least £#{min_balance} to touch in"
       expect{card.touch_in(entry_station)}.to raise_error message
     end
-    it '3.1 creates a journey object' do
+    it '3.1 deducst a penalty fare for invalid touch_in' do
       card.top_up(10)
       card.touch_in(entry_station)
-      expect(card.journey).to be_an_instance_of Journey
+      card.touch_in(entry_station)
+      fare = card.journey_log.public_last_log.fare
+      expect(card.balance).to eq(10 - fare)
     end
   end
 
   describe '#touch_out' do
-    before(:each) do
+    it '4.1 deducts an appropriate fare for valid joruney' do
       card.top_up(10)
       card.touch_in(entry_station)
-    end
-    it '4.0 calls finish method on a journey object' do
-      expect(card.journey).to receive(:finish)
       card.touch_out(exit_station)
+      fare = card.journey_log.public_last_log.fare
+      expect(card.balance).to eq 10 - fare
     end
-    it '4.1 deducts a fare' do
+    it '4.2 deducts a penalty fare for invalid touch_out' do
+      card.top_up(10)
       card.touch_out(exit_station)
-      expect(card.balance).to eq 10 - card.journey.fare
+      card.touch_out(exit_station)
+      fare = card.journey_log.public_last_log.fare
+      expect(card.balance).to eq 10 - fare
     end
   end
 end
