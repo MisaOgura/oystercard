@@ -8,37 +8,35 @@ describe Journey do
   subject(:journey) { described_class.new }
   let(:entry_station) { double(:station) }
   let(:exit_station) { double(:station) }
-  let(:valid_log) { {entry: entry_station, exit: exit_station} }
-  let(:no_entry_log) { {exit: exit_station} }
-  let(:no_exit_log) { {entry: entry_station}}
 
   describe '#iniialize' do
-    it 'initializes with log = {}' do
-      expect(journey.log).to eq({})
+    it '1.0 initializes with entry_station = nil' do
+      expect(journey.entry_station).to eq(nil)
+    end
+    it '1.1 initializes with exit_station = nil' do
+      expect(journey.exit_station).to eq(nil)
     end
   end
 
   describe '#start' do
-    it 'logs entry station' do
-      journey.start(entry_station)
-      expect(journey.log[:entry]).to eq(entry_station)
+    it '2.0 remembers entry station' do
+      expect(journey.start(entry_station)).to eq(entry_station)
     end
   end
 
   describe '#finish' do
-    it 'logs exit station' do
-      journey.finish(exit_station)
-      expect(journey.log[:exit]).to eq(exit_station)
+    it '3.0 remembers exit station' do
+      expect(journey.finish(exit_station)).to eq(exit_station)
     end
   end
 
   describe '#fare' do
-    it 'returns a minimal fare for complete journey' do
+    it '4.0 returns a minimal fare for a complete journey' do
       journey.start(entry_station)
       journey.finish(exit_station)
       expect(journey.fare).to eq min_fare
     end
-    it 'returns a penalty fare for invalid touch-out' do
+    it '4.1 returns a penalty fare for an incomplete journey' do
       journey.finish(exit_station)
       expect(journey.fare).to eq penalty_fare
     end
