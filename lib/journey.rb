@@ -14,14 +14,10 @@ class Journey
 
   def end_journey(station)
     @current[:exit] = station
-    # log
   end
 
   def fare
     complete? ? MIN_FARE : PENALTY_FARE
   end
 
-  def reset
-    @current = { entry: nil, exit: nil }
-  end
 end
