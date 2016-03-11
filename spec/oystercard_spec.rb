@@ -7,8 +7,8 @@ describe Oystercard do
   min_balance = Oystercard::MIN_BALANCE
 
   subject(:card) { described_class.new }
-  let(:entry_station) { double(:station) }
-  let(:exit_station) { double(:station) }
+  let(:entry_station) { double(:station, name: 'holborn', zone: 1) }
+  let(:exit_station) { double(:station, name: 'arsenal', zone: 2) }
 
   describe '#initialize' do
     it '1.0 initializes with a default balance' do
@@ -38,15 +38,14 @@ describe Oystercard do
     end
     it '3.1 deducst a penalty fare for invalid touch_in' do
       card.top_up(10)
-      card.touch_in(entry_station)
-      card.touch_in(entry_station)
+      2.times {card.touch_in(entry_station)}
       fare = card.journey_log.public_last_log.fare
       expect(card.balance).to eq(10 - fare)
     end
   end
 
   describe '#touch_out' do
-    it '4.1 deducts an appropriate fare for valid joruney' do
+    it '4.1 deducts an appropriate fare for complete joruney' do
       card.top_up(10)
       card.touch_in(entry_station)
       card.touch_out(exit_station)
@@ -56,9 +55,14 @@ describe Oystercard do
     it '4.2 deducts a penalty fare for invalid touch_out' do
       card.top_up(10)
       card.touch_out(exit_station)
-      card.touch_out(exit_station)
       fare = card.journey_log.public_last_log.fare
       expect(card.balance).to eq 10 - fare
+    end
+  end
+
+  describe '#view_history' do
+    it '5.0 shows a list of journey in string' do
+      expect(card.view_history).to be_an_instance_of String
     end
   end
 end

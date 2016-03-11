@@ -13,8 +13,8 @@ class Station
 
   attr_reader :zone, :name
 
-  def initialize (name)
+  def initialize (name, zone=LIST[name.downcase.gsub(' ', '_').to_sym])
     @name = name.downcase.gsub(' ', '_').to_sym
-    @zone = LIST[@name]
+    @zone = zone
   end
 end

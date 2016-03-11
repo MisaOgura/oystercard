@@ -29,6 +29,10 @@ class Oystercard
     deduct(last_fare)
   end
 
+  def view_history
+    @journey_log.public_history
+  end
+
   private
 
   def first_journey?

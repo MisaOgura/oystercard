@@ -10,17 +10,15 @@ p station3 = Station.new('arsenal')
 p card = Oystercard.new
 card.top_up(50)
 card.touch_in(station1)
-p card.public_log
-p card.balance
-card.touch_out(station2)
-p card.public_log
+card.touch_in(station1)
 p card.balance
 card.touch_out(station3)
-p card.public_log
-p card.balance
-card.touch_in(station1)
-p card.public_log
 p card.balance
 card.touch_in(station2)
-p card.public_log
+card.touch_out(station1)
+puts card.view_history
+p card
+p card.balance
+card.touch_out(station1)
+p card
 p card.balance

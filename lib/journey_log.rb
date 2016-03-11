@@ -14,16 +14,17 @@ class JourneyLog
   end
 
   def public_last_log
-    last_log.dup
+    last_log.dup.freeze
   end
 
   def public_history
-    @history.dup
+    history_in_string
   end
 
   private
 
   def current_journey
+    new_journey if last_log.class != Journey #when last_log == 'No previous journey'
     last_log.complete? ? new_journey : last_log
   end
 
@@ -34,5 +35,11 @@ class JourneyLog
 
   def last_log
     @history[-1].nil? ? 'No previous journey' : @history[-1]
+  end
+
+  def history_in_string
+    converted_history = ""
+    @history.each {|journey| converted_history << journey.freeze.to_s + "\n"}
+    converted_history
   end
 end

@@ -18,10 +18,15 @@ class Journey
   end
 
   def fare
-    complete? ? MIN_FARE : PENALTY_FARE
+    complete? ? MIN_FARE + zone_crossed : PENALTY_FARE
   end
 
   def complete?
     !!@entry_station && !!@exit_station
+  end
+
+  private
+  def zone_crossed
+    (@exit_station.zone - @entry_station.zone).abs
   end
 end
