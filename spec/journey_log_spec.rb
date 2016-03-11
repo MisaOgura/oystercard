@@ -22,14 +22,14 @@ describe JourneyLog do
     # it '2.0 creats a journey object' do
     #   expect(log.start(entry_station)).to be_a Journey
     # end
-    it '2.0 calls begin_journey on a journey object' do
+    xit '2.0 calls begin_journey on a journey object' do
       log.start(entry_station)
       expect(journey).to have_received(:begin_journey).with(entry_station)
     end
   end
 
   describe '#finish' do
-    it '3.0 calls end_journey on a journey object' do
+    xit '3.0 calls end_journey on a journey object' do
       expect(journey).to receive(:end_journey).with(exit_station)
       log.finish(exit_station)
     end
