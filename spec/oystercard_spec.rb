@@ -35,7 +35,7 @@ describe Oystercard do
     it 'charges a penatly if no touch_out' do
       card.top_up(20)
       card.touch_in(station)
-      expect{card.touch_in(station)}.to change {card.balance}.by JOURNEY::PENALTY_FARE
+      expect{card.touch_in(station)}.to change {card.balance}.by -Journey::PENALTY_FARE
     end
 
     xit 'returns beginning of current journey' do
